@@ -1,5 +1,13 @@
-#include <stdio.h>
 #include "log.h"
+
+void test()
+{
+    char fname[] = "test()";
+    
+    print_log(WARNING, "%s: Warning ...\n", fname);
+    print_log(DEBUG, "%s: Debug ...\n", fname);
+    print_log(ERROR, "%s: Error ...\n", fname);
+}
 
 int main(int argc, char *argv[])
 {
@@ -13,9 +21,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < 50; i++) {
         print_log(INFO, "%s: Startup ...\n", fname);
-        print_log(WARNING, "%s: Warning ...\n", fname);
-        print_log(DEBUG, "%s: Debug ...\n", fname);
-        print_log(ERROR, "%s: Error ...\n", fname);
+        test();
         print_log(INFO, "%s: Shutdown ...\n", fname);
     }
 
