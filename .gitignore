@@ -1,6 +1,7 @@
 test
 .vscode/
 *.log
+*.log.*
 # Prerequisites
 *.d
 

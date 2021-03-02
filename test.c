@@ -11,11 +11,13 @@ int main(int argc, char *argv[])
     }
     init_log(DEBUG, true, log_file_name, 10, 10);
 
-    print_log(INFO, "%s: Startup ...\n", fname);
-    print_log(WARNING, "%s: Warning ...\n", fname);
-    print_log(DEBUG, "%s: Debug ...\n", fname);
-    print_log(ERROR, "%s: Error ...\n", fname);
-    print_log(INFO, "%s: Shutdown ...\n", fname);
+    for (int i = 0; i < 50; i++) {
+        print_log(INFO, "%s: Startup ...\n", fname);
+        print_log(WARNING, "%s: Warning ...\n", fname);
+        print_log(DEBUG, "%s: Debug ...\n", fname);
+        print_log(ERROR, "%s: Error ...\n", fname);
+        print_log(INFO, "%s: Shutdown ...\n", fname);
+    }
 
     return 0;
 }
