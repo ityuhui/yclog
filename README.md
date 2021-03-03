@@ -10,19 +10,24 @@ A simple C log library
 * Enable/disable printing log to stderr at the sametime
 * Append local timestamp automatically
 
+## Installation
+
+### Option 1
+Copy the files `log.h` and `log.c` into your project directory by manual.
+
+### Option 2
+Add `ycloc` as submodule to your project repository, then you can sync up the update of original `yclog` repository.
+
+```shell
+cd $your_project_directory
+git submodule add https://github.com/ityuhui/yclog.git
+``` 
+
+
 ## Usage
 
 ```c
 #include "log.h"
-
-void test()
-{
-    char fname[] = "test()";
-    
-    print_log(WARNING, "%s: Warning ...\n", fname);
-    print_log(DEBUG, "%s: Debug ...\n", fname);
-    print_log(ERROR, "%s: Error ...\n", fname);
-}
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +41,9 @@ int main(int argc, char *argv[])
             );
 
     print_log(INFO, "%s: Startup ...\n", fname);
-    test();
+    print_log(WARNING, "%s: Warning ...\n", fname);
+    print_log(DEBUG, "%s: Debug ...\n", fname);
+    print_log(ERROR, "%s: Error ...\n", fname);
     print_log(INFO, "%s: Shutdown ...\n", fname);
 
     return 0;
