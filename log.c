@@ -24,46 +24,38 @@ typedef struct logger_t {
 static logger g_logger;
 static pthread_mutex_t logger_mutex;
 
-static char * log_level_to_string(log_level level)
+static char *log_level_to_string(log_level level)
 {
-    char *levels[] = {"", "DEBUG", "INFO", "WARNING", "ERROR"};
+    char *levels[] = { "", "DEBUG", "INFO", "WARNING", "ERROR" };
     return levels[level];
 }
 
 static void get_current_time(char *buffer, int buffer_size)
 {
-    char *wday[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    char *wday[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
     time_t timep;
     struct tm *p;
     time(&timep);
-    p=localtime(&timep);
-    snprintf(buffer,buffer_size,
-        "%d-%02d-%02d %s %02d:%02d:%02d", 
-        1900 + p->tm_year,
-        1 + p->tm_mon, 
-        p->tm_mday,
-        wday[p->tm_wday],
-        p->tm_hour, 
-        p->tm_min, 
-        p->tm_sec);
+    p = localtime(&timep);
+    snprintf(buffer, buffer_size, "%d-%02d-%02d %s %02d:%02d:%02d", 1900 + p->tm_year, 1 + p->tm_mon, p->tm_mday, wday[p->tm_wday], p->tm_hour, p->tm_min, p->tm_sec);
 }
 
-static unsigned long get_file_size(const char *file_name)  
-{  
-    struct stat buf;  
-    if (stat(file_name, &buf) <0) {  
-        return 0;  
-    }  
-    return (unsigned long)buf.st_size;  
+static unsigned long get_file_size(const char *file_name)
+{
+    struct stat buf;
+    if (stat(file_name, &buf) < 0) {
+        return 0;
+    }
+    return (unsigned long) buf.st_size;
 }
 
 static bool does_file_exist(const char *file_name)
 {
-    if ((access(file_name,F_OK))!=-1) {   
+    if ((access(file_name, F_OK)) != -1) {
         return true;
-    } else {   
+    } else {
         return false;
-    }   
+    }
 }
 
 static void rotate_log_files()
@@ -88,11 +80,11 @@ void init_log(log_level log_mask, bool print_to_stderr, const char *log_file_nam
     pthread_mutex_lock(&logger_mutex);
 
     if (log_mask < DEBUG || log_mask > ERROR) {
-        g_logger.log_mask = DEFAULT_LOG_LEVEL;   
+        g_logger.log_mask = DEFAULT_LOG_LEVEL;
     } else {
         g_logger.log_mask = log_mask;
     }
-    
+
     g_logger.print_to_stderr = print_to_stderr;
     g_logger.log_file = strdup(log_file_name);
     g_logger.max_size_by_Mbytes_per_file = max_size_by_Mbytes_per_file;
@@ -120,11 +112,8 @@ void print_log(log_level lvl, char *fmt, ...)
 
     char buffer_with_timestamp[VL_BUFFER_SIZE];
     memset(buffer_with_timestamp, 0, sizeof(buffer_with_timestamp));
-    snprintf(buffer_with_timestamp, sizeof(buffer_with_timestamp), "%s [%s] %s", 
-        buffer_timestamp, 
-        log_level_to_string(lvl), 
-        buffer);
-    
+    snprintf(buffer_with_timestamp, sizeof(buffer_with_timestamp), "%s [%s] %s", buffer_timestamp, log_level_to_string(lvl), buffer);
+
     pthread_mutex_lock(&logger_mutex);
 
     if (get_file_size(g_logger.log_file) > g_logger.max_size_by_Mbytes_per_file * MBytes) {

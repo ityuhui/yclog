@@ -3,7 +3,7 @@
 void test()
 {
     char fname[] = "test()";
-    
+
     print_log(WARNING, "%s: Warning ...\n", fname);
     print_log(DEBUG, "%s: Debug ...\n", fname);
     print_log(ERROR, "%s: Error ...\n", fname);
