@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
             );
 
     print_log(INFO, "%s: Startup ...\n", fname);
-    print_log(WARNING, "%s: Warning ...\n", fname);
+    char *warning_msg = "This is a warning message.";
+    print_log(WARNING, "%s: Warning: %s\n", fname, warning_msg);
     print_log(DEBUG, "%s: Debug ...\n", fname);
     print_log(ERROR, "%s: Error ...\n", fname);
     print_log(INFO, "%s: Shutdown ...\n", fname);
