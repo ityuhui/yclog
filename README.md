@@ -7,7 +7,7 @@ A simple C log library
 * Multiple log level
 * Print log to file
 * Log file rotation ( both file size and file number support to be configured )
-* Enable/disable printing log to stderr at the sametime
+* Enable/disable printing log to stderr (different foreground color by log level) at the sametime
 * Append local timestamp automatically
 
 ## Installation
@@ -33,19 +33,19 @@ int main(int argc, char *argv[])
 {
     char fname[] = "main()";
 
-    init_log(DEBUG, /*log mask*/
+    init_log(CL_DEBUG, /*log mask*/
             true, /* print to stderr */
             "default.log", /* log file name */
             10, /* max size (by MB) per file */
             10  /* rotation number */
             );
 
-    print_log(INFO, "%s: Startup ...\n", fname);
+    print_log(CL_INFO, "%s: Startup ...\n", fname);
     char *warning_msg = "This is a warning message.";
-    print_log(WARNING, "%s: Warning: %s\n", fname, warning_msg);
-    print_log(DEBUG, "%s: Debug ...\n", fname);
-    print_log(ERROR, "%s: Error ...\n", fname);
-    print_log(INFO, "%s: Shutdown ...\n", fname);
+    print_log(CL_WARNING, "%s: Warning: %s\n", fname, warning_msg);
+    print_log(CL_DEBUG, "%s: Debug ...\n", fname);
+    print_log(CL_ERROR, "%s: Error ...\n", fname);
+    print_log(CL_INFO, "%s: Shutdown ...\n", fname);
 
     return 0;
 }

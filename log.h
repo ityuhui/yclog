@@ -8,10 +8,10 @@ extern "C" {
 #endif
 
 typedef enum log_level_t {
-    DEBUG = 1,
-    INFO,
-    WARNING,
-    ERROR
+    CL_DEBUG = 1,
+    CL_INFO,
+    CL_WARNING,
+    CL_ERROR
 } log_level;
 
 extern void init_log(log_level log_mask, bool print_to_stderr, const char *log_file_name, int max_size_by_Mbytes, int max_rotate_number);

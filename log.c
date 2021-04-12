@@ -11,7 +11,7 @@
 #define FILE_NAME_MAX_LENGTH 128
 #define VL_BUFFER_SIZE 1024
 #define MBytes (1024*1024)
-#define DEFAULT_LOG_LEVEL INFO
+#define DEFAULT_LOG_LEVEL CL_INFO
 
 typedef struct logger_t {
     log_level log_mask;
@@ -79,7 +79,7 @@ void init_log(log_level log_mask, bool print_to_stderr, const char *log_file_nam
 {
     pthread_mutex_lock(&logger_mutex);
 
-    if (log_mask < DEBUG || log_mask > ERROR) {
+    if (log_mask < CL_DEBUG || log_mask > CL_ERROR) {
         g_logger.log_mask = DEFAULT_LOG_LEVEL;
     } else {
         g_logger.log_mask = log_mask;
@@ -91,6 +91,24 @@ void init_log(log_level log_mask, bool print_to_stderr, const char *log_file_nam
     g_logger.max_rotate_number = max_rotate_number;
 
     pthread_mutex_unlock(&logger_mutex);
+}
+
+typedef enum fg_color_t {
+    FG_COLOR_DEFAULT = 0,
+    FG_COLOR_RED = 31,
+    FG_COLOR_GREEN = 32
+} fg_color_t ;
+
+static fg_color_t foreground_color(log_level lvl)
+{
+    fg_color_t foreground_colors[] = { 
+        FG_COLOR_DEFAULT/**/, 
+        FG_COLOR_GREEN/*DEBUG*/, 
+        FG_COLOR_DEFAULT/*INFO*/, 
+        FG_COLOR_DEFAULT/*WARNING*/, 
+        FG_COLOR_RED/*ERROR*/ 
+    };
+    return foreground_colors[lvl];
 }
 
 void print_log(log_level lvl, char *fmt, ...)
@@ -127,6 +145,11 @@ void print_log(log_level lvl, char *fmt, ...)
     pthread_mutex_unlock(&logger_mutex);
 
     if (g_logger.print_to_stderr) {
-        fprintf(stderr, "%s", buffer_with_timestamp);
+        fg_color_t c = foreground_color(lvl);
+        if (c != FG_COLOR_DEFAULT) {
+            fprintf(stderr, "\033[%dm%s\033[0m", foreground_color(lvl), buffer_with_timestamp);
+        } else {
+            fprintf(stderr, "%s", buffer_with_timestamp);
+        }
     }
 }
